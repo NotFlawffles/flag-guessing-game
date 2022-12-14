@@ -70,6 +70,7 @@ class Mode(enum.Enum):
 
 def main(mode=Mode.Random, count=10):
     flags = []
+    got = 0
     for _ in range(count):
         picked = random.choice(mode.value)
         if picked not in flags:
@@ -80,6 +81,7 @@ def main(mode=Mode.Random, count=10):
         os.system(f"viu {flag.location}")
         guess = input("\nwhat flag is that: ")
         if guess == flag.name:
+            got += 1
             print("correct!")
             time.sleep(0.5)
 
@@ -87,6 +89,7 @@ def main(mode=Mode.Random, count=10):
             print(f"it was {flag.name}")
             time.sleep(2)
 
+    print(f"\nyou got {got}/{count}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
