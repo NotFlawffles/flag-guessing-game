@@ -1,4 +1,4 @@
-import random, sys, os, enum, time
+import random, sys, os, enum, time, threading
 
 
 class Flag:
@@ -69,27 +69,37 @@ class Mode(enum.Enum):
 
 
 def main(mode=Mode.Random, count=10):
+    global right_answer
     flags = []
     got = 0
-    for _ in range(count):
+    i = 0
+    while i < count:
         picked = random.choice(mode.value)
         if picked not in flags:
             flags.append(picked)
+            i += 1
+
+        else:
+            continue
 
     for flag in flags:
         print()
         os.system(f"viu {flag.location}")
-        guess = input("\nwhat flag is that: ")
-        if guess == flag.name:
-            got += 1
-            print("correct!")
-            time.sleep(0.5)
-
-        else:
+        print()
+        correct = False
+        for _ in range(3):
+            answer = input("what flag is this: ")
+            if answer.replace(' ', '') == flag.name.replace(' ', ''):
+                got += 1
+                correct = True
+                break
+        
+        if not(correct):
             print(f"it was {flag.name}")
-            time.sleep(2)
+            time.sleep(1)
 
     print(f"\nyou got {got}/{count}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
